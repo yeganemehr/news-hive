@@ -2,6 +2,7 @@
 
 namespace App\Sources;
 
+use App\Contracts\ISource;
 use App\Enums\DocumentSource;
 use App\Enums\TagRole;
 use App\Models\Author;
@@ -12,6 +13,7 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Psr\Log\LoggerInterface;
 
 /**
  * These types are intentionally incomplete, for sake of simplicity.
@@ -22,11 +24,11 @@ use Illuminate\Support\Str;
  * @phpstan-type SearchItemTag SearchItemKeywordTag|SearchItemContributorTag
  * @phpstan-type SearchItem array{id:string,webTitle:string,webPublicationDate:string,fields:SearchItemFields,tags:SearchItemTag[]}
  */
-class Guardian
+class Guardian implements ISource
 {
-    protected Client $client;
+    private Client $client;
 
-    public function __construct(protected string $apiKey)
+    public function __construct(private string $apiKey, private LoggerInterface $logger)
     {
         $this->client = new Client([
             'base_uri' => 'https://content.guardianapis.com',
@@ -69,16 +71,23 @@ class Guardian
              * @var array{response:array{status:'ok',results:SearchItem[]}} $data
              */
             foreach ($data['response']['results'] as $item) {
-                if ($latest and $item['id'] == $latest->source_id) {
+                if (($latest and $item['id'] == $latest->source_id) or $itemsSaved >= $maxItems) {
                     // It's a descending list
                     // Let's stop
                     break 2;
                 }
 
-                $this->createDocument($item);
-
+                try {
+                    $this->createDocument($item);
+                    $itemsSaved++;
+                } catch (Exception $e) {
+                    $this->logger->error('Error in saving a Guardian document: ' . $e->__toString(), [
+                        'document' => [
+                            'id' => $item['id'],
+                        ],
+                    ]);
+                }
                 $cursor = $item['id'];
-                $itemsSaved++;
             }
         } while ($itemsSaved < $maxItems);
     }

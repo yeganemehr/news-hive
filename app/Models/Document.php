@@ -74,6 +74,14 @@ class Document extends Model
         }
     }
 
+    public function scopeByNYTimes(Builder $query, ?string $id = null): void
+    {
+        $query->where('source_type', DocumentSource::NYTIMES);
+        if ($id != null) {
+            $query->where('source_id', $id);
+        }
+    }
+
     public function scopeFilter(Builder $query, array $filters) {}
 
     public function scopeLatestSummerizedPublished($query, ?int $limit = 10): void
