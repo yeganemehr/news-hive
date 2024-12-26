@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Sources\ESPN;
 use App\Sources\Guardian;
 use App\Sources\NYTimes;
 use Illuminate\Contracts\Container\Container;
@@ -18,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(NYTimes::class, fn (Container $app) => new NYTimes(
             apiKey: config('sources.nytimes.api-key') ?? '',
+            logger: $app->make('log'),
+        ));
+
+        $this->app->bind(ESPN::class, fn (Container $app) => new ESPN(
             logger: $app->make('log'),
         ));
     }

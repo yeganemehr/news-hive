@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GuardianSeeder::class,
             NYTimesSeeder::class,
+            ESPNSeeder::class,
         ]);
     }
 }

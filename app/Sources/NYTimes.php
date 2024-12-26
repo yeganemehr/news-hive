@@ -19,6 +19,8 @@ use Psr\Log\LoggerInterface;
 // You want me to code clean, strucutred and minimal, so I did my best!
 
 /**
+ * These types are intentionally incomplete, for sake of simplicity.
+ *
  * @phpstan-type Article array{_id:string,web_url:string,headline:Headline,pub_date:string,document_type:string,type_of_material:string,keywords:Keyword[],multimedia:Multimedia[],section_name:string,subsection_name?:string,byline:Byline}
  * @phpstan-type Headline array{main:string}
  * @phpstan-type Person array{firstname:string,middlename:string,lastname:string}
@@ -147,7 +149,7 @@ class NYTimes implements ISource
     }
 
     /**
-     * @param  Person[]  $tags
+     * @param  Person[]  $persons
      * @return int[]
      */
     private function getOrCreateAuthors(array $persons): array
