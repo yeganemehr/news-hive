@@ -26,3 +26,6 @@ jobs:
 
     - name: Run tests
       run: php artisan test --coverage
+
+    - name: Analyze OpenAPI
+      run: php artisan scramble:analyze

@@ -5,7 +5,10 @@ namespace App\Providers;
 use App\Sources\ESPN;
 use App\Sources\Guardian;
 use App\Sources\NYTimes;
+use Dedoc\Scramble\Scramble;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +28,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ESPN::class, fn (Container $app) => new ESPN(
             logger: $app->make('log'),
         ));
+
+        Scramble::ignoreDefaultRoutes();
+    }
+
+    public function boot(): void
+    {
+        Gate::define('viewApiDocs', fn (?User $user) => true);
+
+        Scramble::registerApi('v1', [
+            'api_path' => 'api/v1',
+        ]);
+
     }
 }

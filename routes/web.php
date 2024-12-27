@@ -1,3 +1,6 @@
 <?php
 
-// This file only exist to prevent Laravel "Offical" extension for VS Code from crashing.
+use Dedoc\Scramble\Scramble;
+
+Scramble::registerUiRoute(path: 'docs/v1', api: 'v1');
+Scramble::registerJsonSpecificationRoute(path: 'docs/v1.json', api: 'v1');

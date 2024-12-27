@@ -20,7 +20,7 @@ class UpdateDocumentRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route()->parameter('document');
+        $id = $this->route()?->parameter('document');
 
         return [
             'slug' => ['sometimes', 'required', 'string', Rule::unique(Document::class)->ignore($id)],

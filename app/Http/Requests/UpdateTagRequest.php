@@ -20,7 +20,7 @@ class UpdateTagRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route()->parameter('document');
+        $id = $this->route()?->parameter('document');
 
         return [
             'slug' => ['sometimes', 'required', 'string', Rule::unique(Tag::class)->ignore($id)],
