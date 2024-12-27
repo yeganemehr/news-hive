@@ -34,6 +34,16 @@ class ESPN implements ISource
         $this->client = new Client;
     }
 
+    /**
+     * @return $this
+     */
+    public function setClient(Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
     public function fetch(int $maxItems, bool $seeding): void
     {
         $latest = Document::query()->orderByDesc('published_at')->byESPN()->first();
@@ -55,7 +65,7 @@ class ESPN implements ISource
         }
     }
 
-    private function fetchSoccerNews(string $league, int $maxItems): void
+    public function fetchSoccerNews(string $league, int $maxItems): void
     {
         $response = $this->client->get("https://site.api.espn.com/apis/site/v2/sports/soccer/{$league}/news", [
             'query' => [
@@ -111,7 +121,7 @@ class ESPN implements ISource
         }
     }
 
-    private function fetchArticle(string $dataSourceIdentifier, string $url): void
+    public function fetchArticle(string $dataSourceIdentifier, string $url): void
     {
         $response = $this->client->get($url);
         $data = json_decode($response->getBody(), true);

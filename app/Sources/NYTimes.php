@@ -39,6 +39,16 @@ class NYTimes implements ISource
         ]);
     }
 
+    /**
+     * @return $this
+     */
+    public function setClient(Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
     public function fetch(int $maxItems, bool $seeding): void
     {
         if ($maxItems > 1000) {
@@ -93,6 +103,9 @@ class NYTimes implements ISource
                         ],
                     ]);
                 }
+            }
+            if (count($data['response']['docs']) < 10) {
+                break;
             }
         } while ($itemsSaved < $maxItems);
     }

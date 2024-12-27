@@ -35,6 +35,16 @@ class Guardian implements ISource
         ]);
     }
 
+    /**
+     * @return $this
+     */
+    public function setClient(Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
     public function fetch(int $maxItems, bool $seeding): void
     {
         $latest = Document::query()->orderByDesc('published_at')->byGuardian()->first();
@@ -88,6 +98,10 @@ class Guardian implements ISource
                     ]);
                 }
                 $cursor = $item['id'];
+            }
+
+            if (count($data['response']['results']) < 200) {
+                break;
             }
         } while ($itemsSaved < $maxItems);
     }

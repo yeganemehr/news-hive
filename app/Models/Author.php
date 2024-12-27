@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Sluggable\HasSlug;
@@ -17,6 +18,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Author extends Model
 {
+    use HasFactory;
     use HasSlug;
     use HasUlids;
 
