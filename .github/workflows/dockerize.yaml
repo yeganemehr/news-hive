@@ -2,6 +2,8 @@ name: Dockerize
 
 on:
   push:
+    paths-ignore:
+      - .github/workflows/ci.yaml
 
 jobs:
   build:
