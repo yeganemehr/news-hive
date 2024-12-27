@@ -92,7 +92,27 @@ class Document extends Model
         }
     }
 
-    public function scopeFilter(Builder $query, array $filters) {}
+    /**
+     * @param  array{"tag-slug"?:string,"author-slug"?:string,"published-from"?:string,"published-to"?:string,"source-type"?:string}  $filters
+     */
+    public function scopeFilter(Builder $query, array $filters)
+    {
+        if (isset($filters['author-slug'])) {
+            $query->whereRelation('authors', 'slug', $filters['author-slug']);
+        }
+        if (isset($filters['tag-slug'])) {
+            $query->whereRelation('tags', 'slug', $filters['tag-slug']);
+        }
+        if (isset($filters['published-from'])) {
+            $query->where('published_at', '>=', Carbon::parse($filters['published-from']));
+        }
+        if (isset($filters['published-to'])) {
+            $query->where('published_at', '<', Carbon::parse($filters['published-to']));
+        }
+        if (isset($filters['source-type'])) {
+            $query->where('source_type', $filters['source-type']);
+        }
+    }
 
     public function scopeLatestSummerizedPublished($query, ?int $limit = 10): void
     {
