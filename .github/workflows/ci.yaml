@@ -25,4 +25,4 @@ jobs:
       run: vendor/bin/pint --test
 
     - name: Run tests
-      run: php artsian test
+      run: php artisan test --coverage
