@@ -1,0 +1,17 @@
+bootstrap/cache/services.php
+bootstrap/cache/packages.php
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+
+vendor/
+.vscode/
+coverage/
+
+**.git
+**.gitignore
+**.gitattributes
+.env*
+Dockerfile
+.phpunit.result.cache
